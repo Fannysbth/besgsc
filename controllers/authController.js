@@ -48,10 +48,10 @@ exports.registerUser = async (req, res) => {
 
     // Kirim token sebagai cookie
     res.cookie('token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 7 * 24 * 60 * 60 * 1000
+      secure: true, // harus true di production (karena https)
+    httpOnly: true,
+    sameSite: 'none', // HARUS none biar bisa cross-domain (vercel <-> railway)
+    maxAge: 24 * 60 * 60 * 1000
     });
 
     res.json({ success: true, user: newUser });
@@ -70,10 +70,10 @@ exports.loginSuccess = async (req, res) => {
     const token = generateToken(user);
 
     res.cookie('token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 7 * 24 * 60 * 60 * 1000
+      secure: true, // harus true di production (karena https)
+    httpOnly: true,
+    sameSite: 'none', // HARUS none biar bisa cross-domain (vercel <-> railway)
+    maxAge: 24 * 60 * 60 * 1000
     });
 
     res.redirect(`${FRONTEND_URL}/Dashboardcoba`);
@@ -123,10 +123,10 @@ exports.loginWithPassword = async (req, res) => {
     const token = generateToken(user);
 
     res.cookie('token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+      secure: true, // harus true di production (karena https)
+    httpOnly: true,
+    sameSite: 'none', // HARUS none biar bisa cross-domain (vercel <-> railway)
+    maxAge: 24 * 60 * 60 * 1000
     });
 
     res.json({ success: true, user });
