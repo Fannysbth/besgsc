@@ -51,7 +51,7 @@ class AlertService {
       case 'temperature':
       case 'humidity': {
         const { thi_status } = calculateTHIStatus(data.temp, data.humidity || 50);
-        return ['Siaga', 'Bahaya', 'Sangat Bahaya'].includes(thi_status);
+        return [ 'Bahaya', 'Sangat Bahaya'].includes(thi_status);
       }
       case 'sound': {
         const soundStatus = calculateSoundStatus(data.db);
@@ -95,7 +95,7 @@ class AlertService {
       }
       case 'humidity': {
         const { thi_status } = calculateTHIStatus(data.temp, data.humidity);
-        return ['Siaga', 'Bahaya', 'Sangat Bahaya'].includes(thi_status) ? 'humidity_high' : 'humidity_normal';
+        return [ 'Bahaya', 'Sangat Bahaya'].includes(thi_status) ? 'humidity_high' : 'humidity_normal';
       }
       case 'sound': {
         const soundStatus = calculateSoundStatus(data.db);

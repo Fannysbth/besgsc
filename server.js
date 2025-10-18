@@ -30,6 +30,7 @@ const server = http.createServer(app);
 const PORT = process.env.PORT || 3000;
 
 // === Middleware ===
+
 app.use(helmet());
 app.use(cors({
   origin: process.env.FRONTEND_URL,
@@ -43,12 +44,17 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-   secure: true, // harus true di production (karena https)
+    secure: process.env.NODE_ENV === 'production', // Auto based on environment
     httpOnly: true,
-    sameSite: 'none', // HARUS none biar bisa cross-domain (vercel <-> railway)
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
     maxAge: 24 * 60 * 60 * 1000
   }
 }));
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
+  console.log('Cookies:', req.cookies);
+  next();
+});
 app.use(passport.initialize());
 
 // === Setup Socket.IO ===
@@ -81,6 +87,10 @@ app.use((req, res) => res.status(404).json({ success: false, message: 'Route not
 process.on('SIGINT', () => {
   console.log('Shutting down gracefully...');
   process.exit(0);
+});
+app.use('/api/users', (req, res, next) => {
+  console.log('Users route accessed');
+  next();
 });
 
 // === Start Server ===
